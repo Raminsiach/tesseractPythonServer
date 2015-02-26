@@ -1,4 +1,4 @@
-from bottle import route, run, template, request
+from bottle import route, run, template, request, static_file
 from ctypes import *
 import os
 import textify
@@ -6,12 +6,7 @@ import textify
 
 @route('/')
 def index():
-    return '''
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-        Select a file: <input type="file" name="upload" />
-        <input type="submit" value="Start upload" />
-        </form>
-    '''
+    return template('index')
 
 @route('/upload', method = 'POST')
 def doUpload():
@@ -19,6 +14,10 @@ def doUpload():
     save_path = 'uploads/'
     upload.save(save_path)
     return textify.toText(os.getcwd() + '/' + save_path + upload.filename);
+
+@route('/static/<filename>')
+def server_static(filename):
+    return static_file(filename, root='static/')
     
 
 run(host='localhost', port=8080)
