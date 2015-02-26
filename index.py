@@ -13,7 +13,10 @@ def doUpload():
     upload = request.files.get('upload')
     save_path = 'uploads/'
     upload.save(save_path)
-    return template('result', value=textify.toText(os.getcwd() + '/' + save_path + upload.filename))
+    filePath = os.getcwd() + '/' + save_path + upload.filename
+    value=textify.toText(filePath)
+    os.remove(filePath)
+    return template('result', value=value)
 
 @route('/static/<filename>')
 def server_static(filename):
